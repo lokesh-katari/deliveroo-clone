@@ -354,10 +354,10 @@ const styles = StyleSheet.create({
   },
   basket: {
     color: "#fff",
-    backgroundColor: "#19AA86",
+    backgroundColor: "#743f96",
     fontWeight: "bold",
     padding: 8,
-    borderRadius: 2,
+    borderRadius: 10,
   },
   basketTotal: {
     color: "#fff",

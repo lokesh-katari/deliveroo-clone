@@ -5,6 +5,11 @@ import { Pressable, useColorScheme } from "react-native";
 import CustomHeader from "@/Components/CustomHeader";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from "@react-navigation/native";
 import Colors from "@/constants/Colors";
 
 export default function RootLayoutNav() {
