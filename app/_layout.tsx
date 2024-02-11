@@ -1,58 +1,104 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+// import { SomeHostFunction } from 'some-library';
+import { Stack, useNavigation } from "expo-router";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { Pressable, useColorScheme } from "react-native";
+import CustomHeader from "@/Components/CustomHeader";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Ionicons } from "@expo/vector-icons";
+import Colors from "@/constants/Colors";
 
-import { useColorScheme } from '@/components/useColorScheme';
-
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from 'expo-router';
-
-export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
-};
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
-export default function RootLayout() {
-  const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-    ...FontAwesome.font,
-  });
-
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
-  useEffect(() => {
-    if (error) throw error;
-  }, [error]);
-
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
-  return <RootLayoutNav />;
-}
-
-function RootLayoutNav() {
+export default function RootLayoutNav() {
   const colorScheme = useColorScheme();
-
+  const navigation = useNavigation();
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
-    </ThemeProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <BottomSheetModalProvider>
+        <Stack>
+          <Stack.Screen
+            name="index"
+            options={{
+              headerShown: true,
+              header: () => <CustomHeader />,
+              title: "hii",
+              // statusBarHidden: true,
+              // statusBarColor: "black",
+            }}
+          />
+          <Stack.Screen
+            name="(modal)/filter"
+            options={{
+              title: "Filter",
+              presentation: "modal",
+            }}
+          />
+          <Stack.Screen
+            name="(modal)/location-search"
+            options={{
+              presentation: "fullScreenModal",
+              headerTitle: "Select location",
+              headerLeft: () => (
+                <Pressable
+                  onPress={() => {
+                    navigation.goBack();
+                  }}
+                >
+                  <Ionicons
+                    name="close-outline"
+                    size={28}
+                    color={Colors.primary}
+                  />
+                </Pressable>
+              ),
+            }}
+          />
+          <Stack.Screen
+            name="(modal)/dish"
+            options={{
+              presentation: "modal",
+              headerTitle: "",
+              headerTransparent: true,
+
+              headerLeft: () => (
+                <Pressable
+                  style={{
+                    backgroundColor: "#fff",
+                    borderRadius: 20,
+                    padding: 6,
+                  }}
+                  onPress={() => {
+                    navigation.goBack();
+                  }}
+                >
+                  <Ionicons
+                    name="close-outline"
+                    size={28}
+                    color={Colors.primary}
+                  />
+                </Pressable>
+              ),
+            }}
+          />
+          <Stack.Screen
+            name="basket"
+            options={{
+              headerTitle: "Basket",
+              headerLeft: () => (
+                <Pressable
+                  onPress={() => {
+                    navigation.goBack();
+                  }}
+                >
+                  <Ionicons
+                    name="arrow-back"
+                    size={28}
+                    color={Colors.primary}
+                  />
+                </Pressable>
+              ),
+            }}
+          />
+        </Stack>
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
   );
 }
